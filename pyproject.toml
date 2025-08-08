@@ -1,0 +1,13 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"  # or "py311" if you upgrade later
+exclude = ["venv", ".venv", "__pycache__"]
+
+# Enable commonly used rules
+lint.select = [
+    "E",  # pycodestyle (errors)
+    "F",  # pyflakes
+    "I",  # isort (import sorting)
+    "C4", # flake8-comprehensions
+    "UP"  # pyupgrade (e.g., using `match` where appropriate)
+]
