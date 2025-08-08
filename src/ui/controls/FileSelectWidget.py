@@ -1,7 +1,10 @@
-from PySide6 import QtWidgets as qw
+import PySide6.QtCore as qc
+import PySide6.QtWidgets as qw
 
 
 class FileSelectWidget(qw.QWidget):
+    selected_file_changed = qc.Signal(str)
+
     def __init__(self, button_text='Browse...', label_text='No File Selected'):
         super().__init__()
 
@@ -26,7 +29,10 @@ class FileSelectWidget(qw.QWidget):
             "/",
             "CSV Files (*.csv);;All Files (*)")
 
-        self.selected_file = file_path
-        self.label.setText(file_path)
+        self.set_selected_file(file_path)
 
-        print(f"{self.selected_file} is selected")
+    def set_selected_file(self, file_path):
+        self.label.setText(file_path)
+        self.selected_file = file_path
+
+        self.selected_file_changed.emit(self.selected_file)
