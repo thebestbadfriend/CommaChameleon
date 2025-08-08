@@ -1,3 +1,3 @@
-from .FileSelectWidget import FileSelectWidget as FileSelectWidget
+from .DataImportLayoutRow import DataImportLayoutRow as DataImportLayoutRow
 
-__all__ = ['FileSelectWidget']
+__all__ = ['DataImportLayoutRow']

@@ -1,24 +1,34 @@
-import pandas as pd
 import PySide6.QtWidgets as qw
 
-from ui.abstract_entities import PandasModel
-from ui.layouts.DataSelectionLayout import DataSelectionLayout
+from ui.layouts.DataImportLayout import DataImportLayout
+from ui.layouts.OutputPreviewLayout import OutputPreviewLayout
 
 
 class MainWindowLayout(qw.QHBoxLayout):
     def __init__(self):
         super().__init__()
 
-        self.data_selection_layout = DataSelectionLayout()
-        self.data_selection_layout.file_select_widget_selected_file_changed.connect(
-            self._on_file_select_widget_selected_file_changed)
+        self.tabs = qw.QTabWidget()
 
-        self.output_preview_widget = qw.QTableView()
-        self.model = PandasModel(pd.DataFrame())
-        self.output_preview_widget.setModel(self.model)
+        # Data Selection Tab
+        self.data_selection_tab = DataImportLayout()
+        self.data_selection_tab.row_created.connect(
+            self._on_data_import_layout_row_created)
+        self.tabs.addTab(self.data_selection_tab, "Data Import")
 
-        self.addWidget(self.data_selection_layout)
-        self.addWidget(self.output_preview_widget)
+        # Select & Filter Tab
+        self.select_and_filter_tab = qw.QWidget()
+        self.tabs.addTab(self.select_and_filter_tab, "Select && Filter")
 
-    def _on_file_select_widget_selected_file_changed(self, selected_file):
-        self.model.add_csv(selected_file)
+        # Output Tab
+        self.output_tab = qw.QWidget()
+        self.tabs.addTab(self.output_tab, "Output")
+
+        # Output Preview Pane
+        self.output_preview_pane = OutputPreviewLayout()
+
+        self.addWidget(self.tabs)
+        self.addWidget(self.output_preview_pane)
+
+    def _on_data_import_layout_row_created(self, file_id, selected_file):
+        self.output_preview_pane.model.add_csv(file_id, selected_file)
